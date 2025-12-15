@@ -1,0 +1,10 @@
+[workspace]
+resolver="3"
+members = ["api","store"]
+
+[package]
+name = "BetterStack_Rust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
