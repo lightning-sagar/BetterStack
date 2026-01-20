@@ -1,14 +1,22 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use diesel::Connection;
+
+pub struct Store {
+    conn: Connection,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+
+impl Store {
+    pub fn create_user(&self) ->(){
+
+    }
+    pub fn create_website(&self) ->String{
+        format!("1")
+    }
+    pub fn get_user(&self) ->(){
+
+    }
+    pub fn get_website(&self) ->(){
+
     }
 }

@@ -1,13 +1,23 @@
 import express from 'express';
+import { prisma } from 'store/client';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.post('/', async (req, res) => {
   try {
-    const data = req.body;
-    console.log('Received data:', data);
-    res.status(200).json({ message: 'Data received successfully', data });
+    const { url }= req.body;
+    if(!url) {
+      return res.status(400).json({ message: 'URL is required' });
+    }
+    console.log('Received data:', req.body);
+    await prisma.website.create({
+      data: { url }
+    });
+    console.log('Website entry created for URL:', url);
+    res.status(201).json({ message: 'Website created successfully' });
   } catch (error) {
     console.error('Error processing request:', error);
     res.status(500).json({ message: 'Internal Server Error' });
