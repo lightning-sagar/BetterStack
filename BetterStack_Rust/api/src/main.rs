@@ -1,7 +1,7 @@
 use poem::{ Route, Server, get, handler, listener::TcpListener, post, web::{Json}};
 
 use crate::{req_input::CreateWebsiteInput, req_output::CreateWebsiteOutput};
-use store::Store;
+use store::store::Store;
 pub mod req_input;
 pub mod req_output;
 
@@ -12,7 +12,7 @@ async fn get_website()-> String {
 #[handler]
 async fn handler_create_website(data: Json<CreateWebsiteInput>) -> Json<CreateWebsiteOutput> {
     let url:String = data.0.url;
-    let s = Store{};
+    let s = Store::default();
     
     let website_id = s.create_website().to_string();
     let res = CreateWebsiteOutput {
