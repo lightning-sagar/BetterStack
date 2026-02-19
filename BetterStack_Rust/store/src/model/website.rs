@@ -1,6 +1,3 @@
-use std::{env, fmt::format};
-
-use argonautica::{Hasher, Verifier};
 use diesel::{ExpressionMethods, RunQueryDsl, Selectable, SelectableHelper, prelude::{Insertable, Queryable}, query_dsl::methods::{FilterDsl, SelectDsl}};
 use uuid::Uuid;
 use crate::{store::Store};
@@ -20,7 +17,7 @@ impl Store {
     
     pub fn create_website(&mut self, url:String, user_id:String)->Result<Website, diesel::result::Error>{
         let id = Uuid::new_v4();
-        if(url == "".to_string() || user_id == "".to_string()){
+        if url == "".to_string() || user_id == "".to_string(){
             return Err(diesel::result::Error::NotFound);
         }
             
@@ -47,7 +44,7 @@ impl Store {
     }
 
     pub fn get_website(&mut self, user_id:String)->Result<Website, diesel::result::Error>{
-        if(user_id == "".to_string()){
+        if user_id == "".to_string(){
             return Err(diesel::result::Error::NotFound);
         }
 
