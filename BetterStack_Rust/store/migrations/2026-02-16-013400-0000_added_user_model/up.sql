@@ -2,11 +2,11 @@
 /*
   Warnings:
 
-  - Added the required column `userId` to the `Website` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `user_id` to the `Website` table without a default value. This is not possible if the table is not empty.
 
 */
 -- AlterTable
-ALTER TABLE "Website" ADD COLUMN     "userId" TEXT NOT NULL;
+ALTER TABLE "Website" ADD COLUMN     "user_id" TEXT NOT NULL;
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -29,4 +29,4 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Website" ADD CONSTRAINT "Website_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Website" ADD CONSTRAINT "Website_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

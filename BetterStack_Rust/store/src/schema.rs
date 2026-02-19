@@ -28,7 +28,7 @@ diesel::table! {
         id -> Text,
         url -> Text,
         created_at -> Timestamp,
-        userId -> Text,
+        user_id -> Text,
     }
 }
 
@@ -46,7 +46,7 @@ diesel::table! {
     }
 }
 
-diesel::joinable!(Website -> User (userId));
+diesel::joinable!(Website -> User (user_id));
 diesel::joinable!(WebsiteTick -> Region (region_id));
 diesel::joinable!(WebsiteTick -> Website (website_id));
 
