@@ -38,8 +38,7 @@ impl Store {
         let res: Website = diesel::insert_into(crate::schema::Website::table)
             .values(&website)
             .returning(Website::as_returning())// using as_returning to return the inserted website thanks to the selectable trait
-            .get_result(&mut self.conn)
-            .expect("Error inserting website");
+            .get_result(&mut self.conn)?;
         Ok(res)
     }
 
@@ -51,8 +50,7 @@ impl Store {
         let website:Website = crate::schema::Website::table
             .filter(crate::schema::Website::user_id.eq(user_id))
             .select(Website::as_select())
-            .first::<Website>(&mut self.conn) // load vs first is that load returns a vector of results while first returns a single result
-            .expect("Error loading website");
+            .first::<Website>(&mut self.conn)?; // load vs first is that load returns a vector of results while first returns a single result
 
         Ok(website)
     }

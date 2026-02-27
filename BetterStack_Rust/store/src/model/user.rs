@@ -38,7 +38,7 @@ impl Store {
                     .unwrap_or_else(|_| "pls provide the secret for ARGONAUTICA".to_string()),
             )
             .hash()
-            .unwrap();
+            .map_err(|_| diesel::result::Error::RollbackTransaction)?;
         let user = User {
             id: id.to_string(),
             username: username.clone(),
@@ -49,8 +49,7 @@ impl Store {
         let res = diesel::insert_into(crate::schema::User::table)
             .values(&user)
             .returning(User::as_returning()) // using as_returning to return the inserted user thanks to the selectable trait
-            .get_result(&mut self.conn)
-            .expect("Error inserting user");
+            .get_result(&mut self.conn)?;
         Ok(res.id.to_string())
     }
 
@@ -66,8 +65,7 @@ impl Store {
         let user: User = crate::schema::User::table
             .filter(crate::schema::User::username.eq(username))
             .select(User::as_select())
-            .first::<User>(&mut self.conn) // load vs first is that load returns a vector of results while first returns a single result
-            .expect("Error loading user");
+            .first::<User>(&mut self.conn)?; // load vs first is that load returns a vector of results while first returns a single result
         if user.id == "".to_string() {
             return Err(diesel::result::Error::NotFound);
         }
@@ -79,7 +77,7 @@ impl Store {
                     .unwrap_or_else(|_| "pls provide the secret for ARGONAUTICA".to_string()),
             )
             .verify()
-            .unwrap();
+            .map_err(|_| diesel::result::Error::RollbackTransaction)?;
         if pass {
             return Ok(user.id);
         } else {
