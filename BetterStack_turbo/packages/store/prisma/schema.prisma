@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider   = "prisma-client"
   output     = "./generated"
@@ -20,16 +14,16 @@ model User {
   username   String    @unique
   email      String    @unique
   password   String
-  created_At DateTime  @default(now())
-  Websites   Website[]
+  created_at DateTime  @default(now())
+  Website    Website[]
 }
 
 model Website {
   id         String        @id @default(cuid())
-  userId     String
-  User       User          @relation(fields: [userId], references: [id])
-  url        String // @unique
-  created_At DateTime      @default(now())
+  url        String
+  created_at DateTime      @default(now())
+  user_id    String
+  User       User          @relation(fields: [user_id], references: [id])
   ticks      WebsiteTick[]
 }
 
@@ -43,11 +37,18 @@ model WebsiteTick {
   id               String     @id @default(cuid())
   response_time_ms Int
   status_code      StatusCode
-  region           Region     @relation(fields: [region_id], references: [id])
-  website          Website    @relation(fields: [website_id], references: [id])
   time_checked     DateTime   @default(now())
   region_id        String
   website_id       String
+  region           Region     @relation(fields: [region_id], references: [id])
+  website          Website    @relation(fields: [website_id], references: [id])
+}
+
+model diesel_schema_migrations {
+  version String   @id @db.VarChar(50)
+  run_on  DateTime @default(now()) @db.Timestamp(6)
+
+  @@map("__diesel_schema_migrations")
 }
 
 enum StatusCode {

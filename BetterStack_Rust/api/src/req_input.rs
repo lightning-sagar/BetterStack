@@ -3,12 +3,6 @@ use serde::{ Deserialize, Serialize};
 #[derive(Deserialize, Serialize)]
 pub struct CreateWebsiteInput {
     pub url: String,
-    pub user_id: String,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct GetWebsiteInput {
-    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize)]

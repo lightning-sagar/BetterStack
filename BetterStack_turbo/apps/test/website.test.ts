@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import axios from "axios";
-
+// will update this in future
 let BASE_URL = "http://localhost:5000";
 describe("Website get created", () => {
   it("should create a website entry in the database", async () => {

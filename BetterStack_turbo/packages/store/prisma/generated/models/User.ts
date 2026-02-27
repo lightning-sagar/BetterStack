@@ -29,7 +29,7 @@ export type UserMinAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
-  created_At: Date | null
+  created_at: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -37,7 +37,7 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
-  created_At: Date | null
+  created_at: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -45,7 +45,7 @@ export type UserCountAggregateOutputType = {
   username: number
   email: number
   password: number
-  created_At: number
+  created_at: number
   _all: number
 }
 
@@ -55,7 +55,7 @@ export type UserMinAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  created_At?: true
+  created_at?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -63,7 +63,7 @@ export type UserMaxAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  created_At?: true
+  created_at?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -71,7 +71,7 @@ export type UserCountAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  created_At?: true
+  created_at?: true
   _all?: true
 }
 
@@ -152,7 +152,7 @@ export type UserGroupByOutputType = {
   username: string
   email: string
   password: string
-  created_At: Date
+  created_at: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -181,8 +181,8 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  created_At?: Prisma.DateTimeFilter<"User"> | Date | string
-  Websites?: Prisma.WebsiteListRelationFilter
+  created_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  Website?: Prisma.WebsiteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -190,8 +190,8 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
-  Websites?: Prisma.WebsiteOrderByRelationAggregateInput
+  created_at?: Prisma.SortOrder
+  Website?: Prisma.WebsiteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -202,8 +202,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   password?: Prisma.StringFilter<"User"> | string
-  created_At?: Prisma.DateTimeFilter<"User"> | Date | string
-  Websites?: Prisma.WebsiteListRelationFilter
+  created_at?: Prisma.DateTimeFilter<"User"> | Date | string
+  Website?: Prisma.WebsiteListRelationFilter
 }, "id" | "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -211,7 +211,7 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -225,7 +225,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  created_At?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
@@ -233,8 +233,8 @@ export type UserCreateInput = {
   username: string
   email: string
   password: string
-  created_At?: Date | string
-  Websites?: Prisma.WebsiteCreateNestedManyWithoutUserInput
+  created_at?: Date | string
+  Website?: Prisma.WebsiteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -242,8 +242,8 @@ export type UserUncheckedCreateInput = {
   username: string
   email: string
   password: string
-  created_At?: Date | string
-  Websites?: Prisma.WebsiteUncheckedCreateNestedManyWithoutUserInput
+  created_at?: Date | string
+  Website?: Prisma.WebsiteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -251,8 +251,8 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Websites?: Prisma.WebsiteUpdateManyWithoutUserNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Website?: Prisma.WebsiteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -260,8 +260,8 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Websites?: Prisma.WebsiteUncheckedUpdateManyWithoutUserNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Website?: Prisma.WebsiteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -269,7 +269,7 @@ export type UserCreateManyInput = {
   username: string
   email: string
   password: string
-  created_At?: Date | string
+  created_at?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -277,7 +277,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -285,7 +285,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -293,7 +293,7 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -301,7 +301,7 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -309,7 +309,7 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -325,66 +325,66 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutWebsitesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutWebsitesInput, Prisma.UserUncheckedCreateWithoutWebsitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsitesInput
+export type UserCreateNestedOneWithoutWebsiteInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWebsiteInput, Prisma.UserUncheckedCreateWithoutWebsiteInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsiteInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutWebsitesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutWebsitesInput, Prisma.UserUncheckedCreateWithoutWebsitesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsitesInput
-  upsert?: Prisma.UserUpsertWithoutWebsitesInput
+export type UserUpdateOneRequiredWithoutWebsiteNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWebsiteInput, Prisma.UserUncheckedCreateWithoutWebsiteInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWebsiteInput
+  upsert?: Prisma.UserUpsertWithoutWebsiteInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWebsitesInput, Prisma.UserUpdateWithoutWebsitesInput>, Prisma.UserUncheckedUpdateWithoutWebsitesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWebsiteInput, Prisma.UserUpdateWithoutWebsiteInput>, Prisma.UserUncheckedUpdateWithoutWebsiteInput>
 }
 
-export type UserCreateWithoutWebsitesInput = {
+export type UserCreateWithoutWebsiteInput = {
   id?: string
   username: string
   email: string
   password: string
-  created_At?: Date | string
+  created_at?: Date | string
 }
 
-export type UserUncheckedCreateWithoutWebsitesInput = {
+export type UserUncheckedCreateWithoutWebsiteInput = {
   id?: string
   username: string
   email: string
   password: string
-  created_At?: Date | string
+  created_at?: Date | string
 }
 
-export type UserCreateOrConnectWithoutWebsitesInput = {
+export type UserCreateOrConnectWithoutWebsiteInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutWebsitesInput, Prisma.UserUncheckedCreateWithoutWebsitesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWebsiteInput, Prisma.UserUncheckedCreateWithoutWebsiteInput>
 }
 
-export type UserUpsertWithoutWebsitesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutWebsitesInput, Prisma.UserUncheckedUpdateWithoutWebsitesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutWebsitesInput, Prisma.UserUncheckedCreateWithoutWebsitesInput>
+export type UserUpsertWithoutWebsiteInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWebsiteInput, Prisma.UserUncheckedUpdateWithoutWebsiteInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWebsiteInput, Prisma.UserUncheckedCreateWithoutWebsiteInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutWebsitesInput = {
+export type UserUpdateToOneWithWhereWithoutWebsiteInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutWebsitesInput, Prisma.UserUncheckedUpdateWithoutWebsitesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWebsiteInput, Prisma.UserUncheckedUpdateWithoutWebsiteInput>
 }
 
-export type UserUpdateWithoutWebsitesInput = {
+export type UserUpdateWithoutWebsiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type UserUncheckedUpdateWithoutWebsitesInput = {
+export type UserUncheckedUpdateWithoutWebsiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -393,11 +393,11 @@ export type UserUncheckedUpdateWithoutWebsitesInput = {
  */
 
 export type UserCountOutputType = {
-  Websites: number
+  Website: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Websites?: boolean | UserCountOutputTypeCountWebsitesArgs
+  Website?: boolean | UserCountOutputTypeCountWebsiteArgs
 }
 
 /**
@@ -413,7 +413,7 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountWebsitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountWebsiteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WebsiteWhereInput
 }
 
@@ -423,8 +423,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   email?: boolean
   password?: boolean
-  created_At?: boolean
-  Websites?: boolean | Prisma.User$WebsitesArgs<ExtArgs>
+  created_at?: boolean
+  Website?: boolean | Prisma.User$WebsiteArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -433,7 +433,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
-  created_At?: boolean
+  created_at?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -441,7 +441,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
-  created_At?: boolean
+  created_at?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -449,12 +449,12 @@ export type UserSelectScalar = {
   username?: boolean
   email?: boolean
   password?: boolean
-  created_At?: boolean
+  created_at?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "created_At", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "created_at", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Websites?: boolean | Prisma.User$WebsitesArgs<ExtArgs>
+  Website?: boolean | Prisma.User$WebsiteArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -463,14 +463,14 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    Websites: Prisma.$WebsitePayload<ExtArgs>[]
+    Website: Prisma.$WebsitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     username: string
     email: string
     password: string
-    created_At: Date
+    created_at: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -865,7 +865,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  Websites<T extends Prisma.User$WebsitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$WebsitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Website<T extends Prisma.User$WebsiteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$WebsiteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -899,7 +899,7 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
-  readonly created_At: Prisma.FieldRef<"User", 'DateTime'>
+  readonly created_at: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
@@ -1288,9 +1288,9 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.Websites
+ * User.Website
  */
-export type User$WebsitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$WebsiteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Website
    */

@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Website: 'Website',
   Region: 'Region',
-  WebsiteTick: 'WebsiteTick'
+  WebsiteTick: 'WebsiteTick',
+  diesel_schema_migrations: 'diesel_schema_migrations'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,7 +79,7 @@ export const UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  created_At: 'created_At'
+  created_at: 'created_at'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -86,9 +87,9 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const WebsiteScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   url: 'url',
-  created_At: 'created_At'
+  created_at: 'created_at',
+  user_id: 'user_id'
 } as const
 
 export type WebsiteScalarFieldEnum = (typeof WebsiteScalarFieldEnum)[keyof typeof WebsiteScalarFieldEnum]
@@ -112,6 +113,14 @@ export const WebsiteTickScalarFieldEnum = {
 } as const
 
 export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
+
+
+export const Diesel_schema_migrationsScalarFieldEnum = {
+  version: 'version',
+  run_on: 'run_on'
+} as const
+
+export type Diesel_schema_migrationsScalarFieldEnum = (typeof Diesel_schema_migrationsScalarFieldEnum)[keyof typeof Diesel_schema_migrationsScalarFieldEnum]
 
 
 export const SortOrder = {

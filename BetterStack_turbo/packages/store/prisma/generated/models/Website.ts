@@ -26,46 +26,46 @@ export type AggregateWebsite = {
 
 export type WebsiteMinAggregateOutputType = {
   id: string | null
-  userId: string | null
   url: string | null
-  created_At: Date | null
+  created_at: Date | null
+  user_id: string | null
 }
 
 export type WebsiteMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
   url: string | null
-  created_At: Date | null
+  created_at: Date | null
+  user_id: string | null
 }
 
 export type WebsiteCountAggregateOutputType = {
   id: number
-  userId: number
   url: number
-  created_At: number
+  created_at: number
+  user_id: number
   _all: number
 }
 
 
 export type WebsiteMinAggregateInputType = {
   id?: true
-  userId?: true
   url?: true
-  created_At?: true
+  created_at?: true
+  user_id?: true
 }
 
 export type WebsiteMaxAggregateInputType = {
   id?: true
-  userId?: true
   url?: true
-  created_At?: true
+  created_at?: true
+  user_id?: true
 }
 
 export type WebsiteCountAggregateInputType = {
   id?: true
-  userId?: true
   url?: true
-  created_At?: true
+  created_at?: true
+  user_id?: true
   _all?: true
 }
 
@@ -143,9 +143,9 @@ export type WebsiteGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type WebsiteGroupByOutputType = {
   id: string
-  userId: string
   url: string
-  created_At: Date
+  created_at: Date
+  user_id: string
   _count: WebsiteCountAggregateOutputType | null
   _min: WebsiteMinAggregateOutputType | null
   _max: WebsiteMaxAggregateOutputType | null
@@ -171,18 +171,18 @@ export type WebsiteWhereInput = {
   OR?: Prisma.WebsiteWhereInput[]
   NOT?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[]
   id?: Prisma.StringFilter<"Website"> | string
-  userId?: Prisma.StringFilter<"Website"> | string
   url?: Prisma.StringFilter<"Website"> | string
-  created_At?: Prisma.DateTimeFilter<"Website"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Website"> | Date | string
+  user_id?: Prisma.StringFilter<"Website"> | string
   User?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   ticks?: Prisma.WebsiteTickListRelationFilter
 }
 
 export type WebsiteOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   User?: Prisma.UserOrderByWithRelationInput
   ticks?: Prisma.WebsiteTickOrderByRelationAggregateInput
 }
@@ -192,18 +192,18 @@ export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[]
   OR?: Prisma.WebsiteWhereInput[]
   NOT?: Prisma.WebsiteWhereInput | Prisma.WebsiteWhereInput[]
-  userId?: Prisma.StringFilter<"Website"> | string
   url?: Prisma.StringFilter<"Website"> | string
-  created_At?: Prisma.DateTimeFilter<"Website"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Website"> | Date | string
+  user_id?: Prisma.StringFilter<"Website"> | string
   User?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   ticks?: Prisma.WebsiteTickListRelationFilter
 }, "id">
 
 export type WebsiteOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
   _count?: Prisma.WebsiteCountOrderByAggregateInput
   _max?: Prisma.WebsiteMaxOrderByAggregateInput
   _min?: Prisma.WebsiteMinOrderByAggregateInput
@@ -214,61 +214,61 @@ export type WebsiteScalarWhereWithAggregatesInput = {
   OR?: Prisma.WebsiteScalarWhereWithAggregatesInput[]
   NOT?: Prisma.WebsiteScalarWhereWithAggregatesInput | Prisma.WebsiteScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Website"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Website"> | string
   url?: Prisma.StringWithAggregatesFilter<"Website"> | string
-  created_At?: Prisma.DateTimeWithAggregatesFilter<"Website"> | Date | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"Website"> | Date | string
+  user_id?: Prisma.StringWithAggregatesFilter<"Website"> | string
 }
 
 export type WebsiteCreateInput = {
   id?: string
   url: string
-  created_At?: Date | string
-  User: Prisma.UserCreateNestedOneWithoutWebsitesInput
+  created_at?: Date | string
+  User: Prisma.UserCreateNestedOneWithoutWebsiteInput
   ticks?: Prisma.WebsiteTickCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateInput = {
   id?: string
-  userId: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
+  user_id: string
   ticks?: Prisma.WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  User?: Prisma.UserUpdateOneRequiredWithoutWebsitesNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  User?: Prisma.UserUpdateOneRequiredWithoutWebsiteNestedInput
   ticks?: Prisma.WebsiteTickUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   ticks?: Prisma.WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteCreateManyInput = {
   id?: string
-  userId: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
+  user_id: string
 }
 
 export type WebsiteUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WebsiteUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type WebsiteListRelationFilter = {
@@ -283,23 +283,23 @@ export type WebsiteOrderByRelationAggregateInput = {
 
 export type WebsiteCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
 }
 
 export type WebsiteMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
 }
 
 export type WebsiteMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   url?: Prisma.SortOrder
-  created_At?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
 }
 
 export type WebsiteScalarRelationFilter = {
@@ -366,14 +366,14 @@ export type WebsiteUpdateOneRequiredWithoutTicksNestedInput = {
 export type WebsiteCreateWithoutUserInput = {
   id?: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
   ticks?: Prisma.WebsiteTickCreateNestedManyWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateWithoutUserInput = {
   id?: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
   ticks?: Prisma.WebsiteTickUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
@@ -408,23 +408,23 @@ export type WebsiteScalarWhereInput = {
   OR?: Prisma.WebsiteScalarWhereInput[]
   NOT?: Prisma.WebsiteScalarWhereInput | Prisma.WebsiteScalarWhereInput[]
   id?: Prisma.StringFilter<"Website"> | string
-  userId?: Prisma.StringFilter<"Website"> | string
   url?: Prisma.StringFilter<"Website"> | string
-  created_At?: Prisma.DateTimeFilter<"Website"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Website"> | Date | string
+  user_id?: Prisma.StringFilter<"Website"> | string
 }
 
 export type WebsiteCreateWithoutTicksInput = {
   id?: string
   url: string
-  created_At?: Date | string
-  User: Prisma.UserCreateNestedOneWithoutWebsitesInput
+  created_at?: Date | string
+  User: Prisma.UserCreateNestedOneWithoutWebsiteInput
 }
 
 export type WebsiteUncheckedCreateWithoutTicksInput = {
   id?: string
-  userId: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
+  user_id: string
 }
 
 export type WebsiteCreateOrConnectWithoutTicksInput = {
@@ -446,41 +446,41 @@ export type WebsiteUpdateToOneWithWhereWithoutTicksInput = {
 export type WebsiteUpdateWithoutTicksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  User?: Prisma.UserUpdateOneRequiredWithoutWebsitesNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  User?: Prisma.UserUpdateOneRequiredWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateWithoutTicksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type WebsiteCreateManyUserInput = {
   id?: string
   url: string
-  created_At?: Date | string
+  created_at?: Date | string
 }
 
 export type WebsiteUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticks?: Prisma.WebsiteTickUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  created_At?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -516,9 +516,9 @@ export type WebsiteCountOutputTypeCountTicksArgs<ExtArgs extends runtime.Types.E
 
 export type WebsiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   url?: boolean
-  created_At?: boolean
+  created_at?: boolean
+  user_id?: boolean
   User?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   ticks?: boolean | Prisma.Website$ticksArgs<ExtArgs>
   _count?: boolean | Prisma.WebsiteCountOutputTypeDefaultArgs<ExtArgs>
@@ -526,28 +526,28 @@ export type WebsiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type WebsiteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   url?: boolean
-  created_At?: boolean
+  created_at?: boolean
+  user_id?: boolean
   User?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["website"]>
 
 export type WebsiteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   url?: boolean
-  created_At?: boolean
+  created_at?: boolean
+  user_id?: boolean
   User?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["website"]>
 
 export type WebsiteSelectScalar = {
   id?: boolean
-  userId?: boolean
   url?: boolean
-  created_At?: boolean
+  created_at?: boolean
+  user_id?: boolean
 }
 
-export type WebsiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "url" | "created_At", ExtArgs["result"]["website"]>
+export type WebsiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "created_at" | "user_id", ExtArgs["result"]["website"]>
 export type WebsiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   User?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   ticks?: boolean | Prisma.Website$ticksArgs<ExtArgs>
@@ -568,9 +568,9 @@ export type $WebsitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
     url: string
-    created_At: Date
+    created_at: Date
+    user_id: string
   }, ExtArgs["result"]["website"]>
   composites: {}
 }
@@ -997,9 +997,9 @@ export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface WebsiteFieldRefs {
   readonly id: Prisma.FieldRef<"Website", 'String'>
-  readonly userId: Prisma.FieldRef<"Website", 'String'>
   readonly url: Prisma.FieldRef<"Website", 'String'>
-  readonly created_At: Prisma.FieldRef<"Website", 'DateTime'>
+  readonly created_at: Prisma.FieldRef<"Website", 'DateTime'>
+  readonly user_id: Prisma.FieldRef<"Website", 'String'>
 }
     
 

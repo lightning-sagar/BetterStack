@@ -59,3 +59,8 @@ export type Region = Prisma.RegionModel
  * 
  */
 export type WebsiteTick = Prisma.WebsiteTickModel
+/**
+ * Model diesel_schema_migrations
+ * 
+ */
+export type diesel_schema_migrations = Prisma.diesel_schema_migrationsModel

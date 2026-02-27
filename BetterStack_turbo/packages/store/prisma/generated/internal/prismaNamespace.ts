@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Website: 'Website',
   Region: 'Region',
-  WebsiteTick: 'WebsiteTick'
+  WebsiteTick: 'WebsiteTick',
+  diesel_schema_migrations: 'diesel_schema_migrations'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "website" | "region" | "websiteTick"
+    modelProps: "user" | "website" | "region" | "websiteTick" | "diesel_schema_migrations"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    diesel_schema_migrations: {
+      payload: Prisma.$diesel_schema_migrationsPayload<ExtArgs>
+      fields: Prisma.diesel_schema_migrationsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.diesel_schema_migrationsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.diesel_schema_migrationsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        findFirst: {
+          args: Prisma.diesel_schema_migrationsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.diesel_schema_migrationsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        findMany: {
+          args: Prisma.diesel_schema_migrationsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>[]
+        }
+        create: {
+          args: Prisma.diesel_schema_migrationsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        createMany: {
+          args: Prisma.diesel_schema_migrationsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.diesel_schema_migrationsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>[]
+        }
+        delete: {
+          args: Prisma.diesel_schema_migrationsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        update: {
+          args: Prisma.diesel_schema_migrationsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        deleteMany: {
+          args: Prisma.diesel_schema_migrationsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.diesel_schema_migrationsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.diesel_schema_migrationsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>[]
+        }
+        upsert: {
+          args: Prisma.diesel_schema_migrationsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$diesel_schema_migrationsPayload>
+        }
+        aggregate: {
+          args: Prisma.Diesel_schema_migrationsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDiesel_schema_migrations>
+        }
+        groupBy: {
+          args: Prisma.diesel_schema_migrationsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Diesel_schema_migrationsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.diesel_schema_migrationsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Diesel_schema_migrationsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -747,7 +822,7 @@ export const UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  created_At: 'created_At'
+  created_at: 'created_at'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -755,9 +830,9 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const WebsiteScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   url: 'url',
-  created_At: 'created_At'
+  created_at: 'created_at',
+  user_id: 'user_id'
 } as const
 
 export type WebsiteScalarFieldEnum = (typeof WebsiteScalarFieldEnum)[keyof typeof WebsiteScalarFieldEnum]
@@ -781,6 +856,14 @@ export const WebsiteTickScalarFieldEnum = {
 } as const
 
 export type WebsiteTickScalarFieldEnum = (typeof WebsiteTickScalarFieldEnum)[keyof typeof WebsiteTickScalarFieldEnum]
+
+
+export const Diesel_schema_migrationsScalarFieldEnum = {
+  version: 'version',
+  run_on: 'run_on'
+} as const
+
+export type Diesel_schema_migrationsScalarFieldEnum = (typeof Diesel_schema_migrationsScalarFieldEnum)[keyof typeof Diesel_schema_migrationsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -973,6 +1056,7 @@ export type GlobalOmitConfig = {
   website?: Prisma.WebsiteOmit
   region?: Prisma.RegionOmit
   websiteTick?: Prisma.WebsiteTickOmit
+  diesel_schema_migrations?: Prisma.diesel_schema_migrationsOmit
 }
 
 /* Types for Logging */
