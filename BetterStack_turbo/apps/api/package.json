@@ -16,6 +16,10 @@
     "@types/express": "^5.0.3",
     "axios": "^1.13.2",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "store": "*"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }
