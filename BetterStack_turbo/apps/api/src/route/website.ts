@@ -1,13 +1,15 @@
 import { Router, type Router as RouterType } from "express";
 import { prisma } from "store/client";
+import { authMiddleware } from "../auth/middleware.js";
 
 export function websiteRouter(): RouterType {
   const router = Router();
 
-  router.post("/website", async (req, res) => {
+  router.post("/website", authMiddleware, async (req, res) => {
     try {
-      const { url, user_id: userId } = req.body;
-
+      const { url } = req.body;
+        console.log(req.user, "creating website with url:", url);
+      const userId = req.user?.userId;
       if (!url || !userId) {
         return res
           .status(400)
@@ -22,7 +24,7 @@ export function websiteRouter(): RouterType {
       const website = await prisma.website.create({
         data: {
           url,
-          userId,
+          user_id:userId,
         },
       });
 
@@ -38,9 +40,9 @@ export function websiteRouter(): RouterType {
     }
   });
 
-  router.get("/websites/:user_id", async (req, res) => {
+  router.get("/websites", authMiddleware, async (req, res) => {
     try {
-      const userId = req.params.user_id;
+      const userId = req.user?.userId;
 
       if (!userId) {
         return res
@@ -49,7 +51,7 @@ export function websiteRouter(): RouterType {
       }
 
       const websites = await prisma.website.findMany({
-        where: { userId },
+        where: { user_id:userId },
       });
 
       return res.status(200).json({ websites });
@@ -59,5 +61,27 @@ export function websiteRouter(): RouterType {
     }
   });
 
+  router.get("/status/:websiteId", authMiddleware, async (req, res) => {
+    try {
+      const userId = req.user?.userId;
+      const { websiteId } = req.params;
+      const website = await prisma.website.findUnique({
+        where: { id: websiteId, user_id:userId },
+        include: { ticks: { orderby: [{ createdAt: "desc" }], take: 1 } },
+      });
+      if (!website) {
+        res.status(403).json({ message: "not found" });
+        return;
+      }
+      const latestTick = website.ticks[0];
+      const status = latestTick ? latestTick.status_code : "Unknown";
+      return res.status(200).json({ status });
+    } catch (error) {
+      console.error("get website status error:", error);
+      return res
+        .status(500)
+        .json({ message: "Failed to fetch website status" });
+    }
+  });
   return router;
 }
