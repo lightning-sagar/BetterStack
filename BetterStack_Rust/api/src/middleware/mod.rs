@@ -1,4 +1,4 @@
-use poem::{Endpoint, Middleware, Request, Result, async_trait, http::StatusCode, middleware::Tracing};
+use poem::{Endpoint, Middleware, Request, Result, http::StatusCode, middleware::Tracing};
 
 #[derive(Clone, Debug)]
 pub struct AuthUser {
