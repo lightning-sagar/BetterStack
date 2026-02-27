@@ -16,3 +16,4 @@ pub fn routes() -> Route {
 		.at("/website", post(website::create_website))
 		.at("/websites", get(website::get_websites))
 }
+ 
