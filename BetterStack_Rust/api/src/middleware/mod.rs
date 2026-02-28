@@ -1,5 +1,4 @@
 use poem::{Endpoint, Middleware, Request, Result, http::StatusCode, middleware::Tracing};
-
 #[derive(Clone, Debug)]
 pub struct AuthUser {
     pub user_id: String,
@@ -19,7 +18,6 @@ impl<E: Endpoint> Middleware<E> for AuthMiddleware {
     }
 }
 
-#[async_trait]
 impl<E: Endpoint> Endpoint for AuthEndpoint<E> {
     type Output = E::Output;
 

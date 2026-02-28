@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 poem = "3.1.12"
+async-trait = "0.1"
 serde = {version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
 store = {path = "../store"}
