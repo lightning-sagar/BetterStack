@@ -1,0 +1,9 @@
+[package]
+name = "redis-stream"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenvy = "0.15"
+tokio = { version = "1", features = ["full"] }
+redis_rs = { package = "redis", version = "0.25", features = ["streams", "tokio-comp"] }

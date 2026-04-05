@@ -1,6 +1,8 @@
-use diesel::{Connection, ConnectionError, PgConnection};
+use diesel::{Connection, ConnectionError, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper};
 
 use crate::config::Config;
+use crate::model::website::Website;
+use crate::schema::Website as WebsiteTable;
 
 pub struct Store {
     pub conn: PgConnection,
@@ -13,5 +15,11 @@ impl Store {
         Ok(Self{
             conn:connection 
         })
+    }
+
+    pub fn get_websites(&mut self) -> Result<Vec<Website>, diesel::result::Error> {
+        WebsiteTable::table
+            .select(Website::as_select())
+            .load::<Website>(&mut self.conn)
     }
 }

@@ -1,6 +1,6 @@
 [workspace]
 resolver="3"
-members = ["api","store"]
+members = ["api", "pusher", "redis","store", "worker"]
 
 [package]
 name = "BetterStack_Rust"
