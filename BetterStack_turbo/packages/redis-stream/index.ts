@@ -26,9 +26,30 @@ type WebsiteAdd = {
   id: string;
 };
 
+const STREAM_KEY = "betteruptime:website";
+
+const ensureConsumerGroup = async (consumerGroup: string) => {
+  try {
+    await redis.sendCommand([
+      "XGROUP",
+      "CREATE",
+      STREAM_KEY,
+      consumerGroup,
+      "0",
+      "MKSTREAM",
+    ]);
+    console.log(`Created consumer group '${consumerGroup}' on ${STREAM_KEY}`);
+  } catch (error) {
+    // BUSYGROUP means the group already exists, which is fine.
+    if (!(error instanceof Error) || !error.message.includes("BUSYGROUP")) {
+      throw error;
+    }
+  }
+};
+
 const XAdd = async (websties: WebsiteAdd[]) => {
   websties.map(async ({ url: websiteUrl, id: websiteId }) => {
-    await redis.XADD("betteruptime:website", "*", {
+    await redis.XADD(STREAM_KEY, "*", {
       url: websiteUrl,
       id: websiteId,
     });
@@ -38,7 +59,7 @@ const XAdd = async (websties: WebsiteAdd[]) => {
 const BulkXAdd = async (websties: WebsiteAdd[]) => {
   const multi = redis.multi();
   websties.forEach(({ url: websiteUrl, id: websiteId }) => {
-    multi.XADD("betteruptime:website", "*", {
+    multi.XADD(STREAM_KEY, "*", {
       url: websiteUrl,
       id: websiteId,
     });
@@ -52,16 +73,32 @@ type XreadType = {
     id: string;
   };
 };
+
 const XReadGroup = async (
   workerId: string,
   consumerGroup: string,
 ): Promise<XreadType[]> => {
-  const res = await redis.XREADGROUP(
-    consumerGroup,
-    workerId,
-    { key: "betteruptime:website", id: ">" },
-    { COUNT: 10, BLOCK: 5000 },
-  );
+  let res;
+  try {
+    res = await redis.XREADGROUP(
+      consumerGroup,
+      workerId,
+      { key: STREAM_KEY, id: ">" },
+      { COUNT: 10, BLOCK: 5000 },
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("NOGROUP")) {
+      await ensureConsumerGroup(consumerGroup);
+      res = await redis.XREADGROUP(
+        consumerGroup,
+        workerId,
+        { key: STREAM_KEY, id: ">" },
+        { COUNT: 10, BLOCK: 5000 },
+      );
+    } else {
+      throw error;
+    }
+  }
   const messages = res ? res[0]?.messages || [] : [];
   console.log("XReadGroup Result:", res);
   // @ts-ignore
@@ -69,7 +106,7 @@ const XReadGroup = async (
 };
 
 const XAck = async (consumerGroup: string, streamId: string) => {
-  const res = await redis.XACK("betteruptime:website", consumerGroup, streamId);
+  const res = await redis.XACK(STREAM_KEY, consumerGroup, streamId);
   console.log("XAck Result:", res);
   return res;
 };

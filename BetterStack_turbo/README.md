@@ -1,135 +1,205 @@
-# Turborepo starter
+# BetterStack Turbo
 
-This Turborepo starter is maintained by the Turborepo core team.
+This repository contains the BetterStack monitoring stack:
 
-## Using this example
+- `apps/my-app`: Next.js frontend
+- `apps/api`: Express API
+- `apps/pusher`: Redis stream producer
+- `apps/worker`: background worker that reads from Redis and writes ticks to the database
+- `packages/store`: shared Prisma client and schema
+- `packages/redis-stream`: Redis stream helpers
 
-Run the following command:
+## Prerequisites
+
+- Node.js 18 or newer
+- npm 11 or newer
+- Bun for the `api`, `pusher`, `worker`, and `test` packages
+- A configured database and Redis instance
+
+## Install
+
+From the repository root:
 
 ```sh
-npx create-turbo@latest
+npm install
 ```
 
-## What's inside?
+### Prisma Setup (From Repository Root)
 
-This Turborepo includes the following packages/apps:
+If you changed the Prisma schema or need to regenerate the client:
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```sh
+npm run -w packages/store prisma:generate
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+Or alternatively:
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```sh
+cd packages/store && npm run prisma:generate
 ```
 
-### Develop
+If you are pointing at an existing database, you may also need:
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```sh
+npm run -w packages/store prisma:pull
+npm run -w packages/store prisma:generate
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+To deploy migrations to the database:
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```sh
+npm run -w packages/store prisma:deploy
+npm run -w packages/store prisma:generate
 ```
 
-### Remote Caching
+**Important:** Always run Prisma commands from the repository root, not from a subdirectory.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## Run The Apps
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Open a separate terminal for each long-running process.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### Frontend
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```sh
+npm run dev --workspace=my-app
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+The frontend runs on the default Next.js port, usually `http://localhost:3000`.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### API
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```sh
+npm run dev --workspace=api
 ```
 
-## Useful Links
+This starts the Express server through Bun. The API listens on `PORT` if set, otherwise it defaults to `5000`.
 
-Learn more about the power of Turborepo:
+### Pusher
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```sh
+cd apps/pusher
+bun index.ts
+```
+
+This process pushes website records into the Redis stream on an interval.
+
+### Worker
+
+```sh
+cd apps/worker
+bun index.ts
+```
+
+The worker reads from the Redis stream and persists website ticks. It expects `REGION_ID` and `WORKER_ID` to be set if you want values other than the defaults.
+
+## Running With Docker
+
+### PostgreSQL (Prisma Database)
+
+Run PostgreSQL in Docker:
+
+```sh
+docker run \
+  --name postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=betterstack \
+  -p 5432:5432 \
+  -d postgres:16-alpine
+```
+
+Set the database URL in your `.env` file:
+
+```
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/betterstack
+```
+
+Then run the Prisma migrations from the repository root:
+
+```sh
+npm run -w packages/store prisma:deploy
+npm run -w packages/store prisma:generate
+```
+
+Or:
+
+```sh
+cd packages/store && npm run prisma:deploy && npm run prisma:generate
+```
+
+To stop and remove the container:
+
+```sh
+docker stop postgres && docker rm postgres
+```
+
+### Redis
+
+Run Redis in Docker:
+
+```sh
+docker run \
+  --name redis \
+  -p 6379:6379 \
+  -d redis:7-alpine
+```
+
+Set the Redis URL in your `.env` file (if needed by your redis-stream package):
+
+```
+REDIS_URL=redis://localhost:6379
+```
+
+To stop and remove the container:
+
+```sh
+docker stop redis && docker rm redis
+```
+
+### Docker Compose (Combined Setup)
+
+Alternatively, create a `docker-compose.yml` file in the repository root:
+
+```yaml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: betterstack
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+```
+
+Then start both services:
+
+```sh
+docker compose up -d
+```
+
+Stop all services:
+
+```sh
+docker compose down
+```
+
+## Notes
+
+- `npm run dev` at the repository root only runs workspaces that expose a `dev` script.
+- The `pusher` and `worker` packages are started manually because they do not currently define workspace scripts.
+- Make sure the API, Redis, and database are available before starting the worker.
+- When using Docker, ensure the `DATABASE_URL` and `REDIS_URL` environment variables in your `.env` file point to the Docker containers.
