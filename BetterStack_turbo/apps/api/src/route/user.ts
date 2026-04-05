@@ -34,6 +34,11 @@ export function userRouter(): RouterType {
         message: `Sign up successful: ${user.id}`,
         success: true,
         token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       });
     } catch (error: any) {
       console.error("signup error:", error);
@@ -89,6 +94,11 @@ export function userRouter(): RouterType {
         message: `Sign in successful: ${user.id}`,
         success: true,
         token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       });
     } catch (error: any) {
       console.error("signin error:", error);

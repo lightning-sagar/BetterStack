@@ -3,10 +3,37 @@ import axios from "axios";
 import { XReadGroup, BulkXAck } from "redis-stream";
 import { prisma } from "store/client";
 
-// region_Id => 1 = usa, 2 = india
+const Region_Input = process.env.REGION_ID || process.env.REGION_NAME || "india";
+const Worker_Id = process.env.WORKER_ID || "1";
+const Consumer_Group = process.env.CONSUMER_GROUP || "worker-group";
 
-const Region_Id = process.env.REGION_ID || "2"; // konse region me worker run kar raha hai
-const Worker_Id = process.env.WORKER_ID || "1"; // worker ke Id
+const resolveRegionId = async () => {
+  const byId = await prisma.region.findUnique({
+    where: { id: Region_Input },
+    select: { id: true },
+  });
+
+  if (byId) {
+    return byId.id;
+  }
+
+  const byName = await prisma.region.findUnique({
+    where: { name: Region_Input },
+    select: { id: true },
+  });
+
+  if (byName) {
+    return byName.id;
+  }
+
+  const created = await prisma.region.create({
+    data: { name: Region_Input },
+    select: { id: true },
+  });
+
+  console.log(`Created missing region '${Region_Input}' with id ${created.id}`);
+  return created.id;
+};
 
 // read all the stream
 // process the stream and store it into the DB.
@@ -14,8 +41,10 @@ const Worker_Id = process.env.WORKER_ID || "1"; // worker ke Id
 // it should probably routed through a queue in a bluk DB request to avoid overloading the DB.
 
 async function main() {
+  const regionId = await resolveRegionId();
+
   while (1) {
-    const res = await XReadGroup(Worker_Id, Region_Id);
+    const res = await XReadGroup(Worker_Id, Consumer_Group);
     console.log("XReadGroup Result:", res);
     if (!res || res.length === 0) {
       console.log("No messages to process");
@@ -36,7 +65,7 @@ async function main() {
               website_id: id,
               status_code: "Up",
               time_checked: new Date(),
-              region_id: Region_Id,
+              region_id: regionId,
             },
           });
           console.log(
@@ -52,7 +81,7 @@ async function main() {
                 website_id: id,
                 status_code: "Down",
                 time_checked: new Date(),
-                region_id: Region_Id,
+                region_id: regionId,
               },
             });
             console.log(`Marked website down for URL: ${url} and ID: ${id}`);
@@ -79,7 +108,7 @@ async function main() {
     console.log(
       `Processed ${processingResults.length} items, acknowledging ${ackIds.length}.`,
     );
-    await BulkXAck(Region_Id, ackIds);
+    await BulkXAck(Consumer_Group, ackIds);
   }
 }
 
