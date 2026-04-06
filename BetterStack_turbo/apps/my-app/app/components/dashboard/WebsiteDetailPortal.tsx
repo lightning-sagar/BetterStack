@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Globe,
+  RefreshCw,
   Search,
   Zap,
   AlertTriangle,
@@ -20,6 +21,8 @@ import { useAuthStore } from "../../store/auth-store";
 import { deleteWebsite, fetchWebsiteDetail, searchWebsites } from "../../lib/dashboard-api";
 import type { Website, WebsiteTick } from "../../types/dashboard";
 import { fetchCurrentUser } from "../../lib/user-api";
+
+const AUTO_REFRESH_MS = 90_000;
 
 type IncidentRow = {
   id: string;
@@ -38,6 +41,22 @@ function formatDateLabel(isoDate: string): string {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
+    hour12: false,
+  });
+}
+
+function formatLastUpdated(isoDate: string | null): string {
+  if (!isoDate) {
+    return "Not synced yet";
+  }
+
+  const date = new Date(isoDate);
+  return date.toLocaleString("en-US", {
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   });
 }
@@ -89,12 +108,16 @@ export function WebsiteDetailPortal() {
   const [ticks, setTicks] = useState<WebsiteTick[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Website[]>([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [lastUpdatedAt, setLastUpdatedAt] = useState<string | null>(null);
+
+  const previousTopTickId = useRef<string | null>(null);
 
   useEffect(() => {
     if (!token) {
@@ -102,34 +125,84 @@ export function WebsiteDetailPortal() {
     }
   }, [router, token]);
 
-  useEffect(() => {
-    async function loadWebsiteDetail() {
+  const loadWebsiteDetail = useCallback(
+    async (mode: "initial" | "manual" | "poll" = "initial") => {
       if (!token || !websiteId) {
         return;
       }
 
       try {
-        setIsLoading(true);
+        if (mode === "initial") {
+          setIsLoading(true);
+        } else {
+          setIsRefreshing(true);
+        }
+
         setError("");
 
+        const shouldFetchUser = !username;
         const [detail, currentUser] = await Promise.all([
           fetchWebsiteDetail(token, websiteId),
-          fetchCurrentUser(token),
+          shouldFetchUser ? fetchCurrentUser(token) : Promise.resolve(null),
         ]);
+
+        const incomingTopTickId = detail.ticks[0]?.id ?? null;
+        const hasNewResults =
+          mode !== "initial" &&
+          previousTopTickId.current !== null &&
+          incomingTopTickId !== null &&
+          incomingTopTickId !== previousTopTickId.current;
 
         setWebsite(detail.website);
         setTicks(detail.ticks);
-        setUsername(currentUser.username);
+
+        if (currentUser) {
+          setUsername(currentUser.username);
+        }
+
+        previousTopTickId.current = incomingTopTickId;
+        setLastUpdatedAt(new Date().toISOString());
+
+        if (mode === "manual") {
+          setMessage(hasNewResults ? "Refreshed. New check results are now visible." : "Refreshed. No new check results yet.");
+        } else if (mode === "poll" && hasNewResults) {
+          setMessage("New monitoring results arrived just now.");
+        }
       } catch (loadError) {
         const loadMessage = loadError instanceof Error ? loadError.message : "Failed to load website detail";
         setError(loadMessage);
       } finally {
         setIsLoading(false);
+        setIsRefreshing(false);
       }
+    },
+    [token, websiteId, username],
+  );
+
+  useEffect(() => {
+    void loadWebsiteDetail("initial");
+  }, [loadWebsiteDetail]);
+
+  useEffect(() => {
+    if (!token || !websiteId) {
+      return;
     }
 
-    void loadWebsiteDetail();
-  }, [token, websiteId]);
+    const intervalId = window.setInterval(() => {
+      void loadWebsiteDetail("poll");
+    }, AUTO_REFRESH_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, [loadWebsiteDetail, token, websiteId]);
+
+  useEffect(() => {
+    if (!message) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => setMessage(""), 2600);
+    return () => window.clearTimeout(timeoutId);
+  }, [message]);
 
   useEffect(() => {
     async function runSearch() {
@@ -187,9 +260,9 @@ export function WebsiteDetailPortal() {
 
     const trend = firstAvg ? Math.round(((firstAvg - secondAvg) / firstAvg) * 100) : 0;
 
-    const bars = (ticks.length
+    const bars = ticks.length
       ? [...ticks].slice(0, 15).reverse().map((tick) => Math.max(46, Math.min(100, tick.response_time_ms / 3.1)))
-      : [80, 85, 75, 90, 95, 100, 80, 85, 70, 90, 100, 100, 95, 100, 90]);
+      : [80, 85, 75, 90, 95, 100, 80, 85, 70, 90, 100, 100, 95, 100, 90];
 
     return {
       uptime,
@@ -230,7 +303,6 @@ export function WebsiteDetailPortal() {
 
   function handleShowComingSoon() {
     setMessage("Alerts are coming soon.");
-    window.setTimeout(() => setMessage(""), 2000);
   }
 
   return (
@@ -244,7 +316,7 @@ export function WebsiteDetailPortal() {
         />
 
         <div className="flex min-w-0 flex-1 flex-col lg:ml-64">
-          <header className="sticky top-0 z-30 flex w-full items-center justify-between bg-surface-dim px-8 py-6">
+          <header className="sticky top-0 z-30 flex w-full flex-col gap-4 bg-surface-dim px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
             <div className="flex items-center gap-4">
               <button
                 type="button"
@@ -256,17 +328,20 @@ export function WebsiteDetailPortal() {
               </button>
               <div>
                 <h2 className="font-display text-2xl font-bold tracking-tight text-primary">{website?.url ?? "Website"}</h2>
-                <div className="mt-1 flex items-center gap-2">
+                <div className="mt-1 flex flex-wrap items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${metrics.isOperational ? "bg-secondary pulse-ring" : "bg-error pulse-ring-error"}`} />
                   <span className={`text-[10px] font-bold uppercase tracking-widest ${metrics.isOperational ? "text-secondary" : "text-error"}`}>
                     {metrics.isOperational ? "Operational" : "Degraded"}
                   </span>
                   <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/70">Owner: {username || "Unknown"}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/70">
+                    Last Sync: {formatLastUpdated(lastUpdatedAt)}
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 lg:gap-4">
               <div className="relative hidden items-center gap-3 rounded-md bg-surface-high px-4 py-2 lg:flex">
                 <Search className="h-4 w-4 text-on-surface-variant" />
                 <input
@@ -298,6 +373,16 @@ export function WebsiteDetailPortal() {
 
               <button
                 type="button"
+                onClick={() => void loadWebsiteDetail("manual")}
+                disabled={isLoading || isRefreshing}
+                className="inline-flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary transition-colors hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+                {isRefreshing ? "Refreshing..." : "Refresh"}
+              </button>
+
+              <button
+                type="button"
                 onClick={handleDeleteWebsite}
                 disabled={isDeleting}
                 className="inline-flex items-center gap-2 rounded-md border border-error/30 bg-error/10 px-4 py-2 text-sm font-bold text-error transition-colors hover:bg-error/20 disabled:cursor-not-allowed disabled:opacity-70"
@@ -308,9 +393,20 @@ export function WebsiteDetailPortal() {
             </div>
           </header>
 
-          <div className="space-y-8 p-8">
+          <div className="space-y-8 p-4 sm:p-6 lg:p-8">
             {message ? <div className="rounded-lg bg-primary/12 px-4 py-2 text-sm font-medium text-primary">{message}</div> : null}
             {error ? <div className="rounded-xl bg-error/15 px-4 py-3 text-sm text-error">{error}</div> : null}
+
+            {!isLoading ? (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-surface-high/40 bg-surface-low px-4 py-3 text-sm">
+                <span className="text-on-surface-variant">
+                  Auto refresh runs every <span className="font-semibold text-on-surface">1.5 minutes</span>.
+                </span>
+                <span className="text-on-surface-variant">
+                  Latest tick count: <span className="font-semibold text-on-surface">{ticks.length}</span>
+                </span>
+              </div>
+            ) : null}
 
             {isLoading ? (
               <DetailSkeleton />
@@ -351,8 +447,8 @@ export function WebsiteDetailPortal() {
                         <span className="font-display text-6xl font-extrabold text-on-surface">{metrics.avgResponse}</span>
                         <span className="ml-1 text-2xl font-bold text-primary">ms</span>
                         <p className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-secondary">
-                          <ChevronRight className="h-3 w-3 rotate-90" />
-                          {Math.abs(metrics.trend)}% faster than last week
+                          <ChevronRight className={`h-3 w-3 ${metrics.trend <= 0 ? "rotate-90" : "-rotate-90"}`} />
+                          {Math.abs(metrics.trend)}% {metrics.trend <= 0 ? "faster" : "slower"} than last week
                         </p>
                       </div>
                     </div>
@@ -394,9 +490,11 @@ export function WebsiteDetailPortal() {
                 </section>
 
                 <section className="space-y-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
                     <h3 className="font-display text-lg font-bold uppercase tracking-widest text-on-surface">Recent Incident History</h3>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Filtered by date range</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                      Showing newest results first
+                    </span>
                   </div>
 
                   <DateRangeFilter
