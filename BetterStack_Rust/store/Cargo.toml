@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-argonautica = "0.2.0"
+argon2 = "0.5"
 chrono = "0.4"
 diesel = { version = "2.2.0", features = ["postgres","chrono"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
 uuid = { version = "1.21.0", features = ["v4"] }

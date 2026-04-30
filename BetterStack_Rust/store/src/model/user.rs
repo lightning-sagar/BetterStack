@@ -1,5 +1,8 @@
 use crate::store::Store;
-use argonautica::{Hasher, Verifier};
+use argon2::{
+    Argon2, PasswordHash, PasswordHasher, PasswordVerifier,
+    password_hash::{SaltString, rand_core::OsRng},
+};
 use diesel::{
     ExpressionMethods, RunQueryDsl, Selectable, SelectableHelper,
     prelude::{Insertable, Queryable},
@@ -35,6 +38,37 @@ fn to_public_user(user: User) -> PublicUser {
     }
 }
 
+fn password_secret() -> String {
+    env::var("SECRET_ARGON2")
+        .or_else(|_| env::var("SECRET_ARGONAUTICA"))
+        .unwrap_or_else(|_| "pls provide the secret for ARGON2".to_string())
+}
+
+fn password_input(password: &str) -> Vec<u8> {
+    let secret = password_secret();
+    let mut input = Vec::with_capacity(secret.len() + password.len() + 1);
+    input.extend_from_slice(secret.as_bytes());
+    input.push(b':');
+    input.extend_from_slice(password.as_bytes());
+    input
+}
+
+fn hash_password(password: &str) -> Result<String, argon2::password_hash::Error> {
+    let salt = SaltString::generate(&mut OsRng);
+    let input = password_input(password);
+    Ok(Argon2::default()
+        .hash_password(&input, &salt)?
+        .to_string())
+}
+
+fn verify_password(password: &str, hash: &str) -> Result<bool, argon2::password_hash::Error> {
+    let parsed_hash = PasswordHash::new(hash)?;
+    let input = password_input(password);
+    Ok(Argon2::default()
+        .verify_password(&input, &parsed_hash)
+        .is_ok())
+}
+
 impl Store {
     pub fn sign_up(
         &mut self,
@@ -46,13 +80,7 @@ impl Store {
         if password.is_empty() || email.is_empty() || username.is_empty() {
             return Err(diesel::result::Error::NotFound);
         }
-        let pass = Hasher::default()
-            .with_password(password)
-            .with_secret_key(
-                env::var("SECRET_ARGONAUTICA")
-                    .unwrap_or_else(|_| "pls provide the secret for ARGONAUTICA".to_string()),
-            )
-            .hash()
+        let pass = hash_password(&password)
             .map_err(|_| diesel::result::Error::RollbackTransaction)?;
         let user = User {
             id: id.to_string(),
@@ -83,14 +111,7 @@ impl Store {
         if user.id == "".to_string() {
             return Err(diesel::result::Error::NotFound);
         }
-        let pass = Verifier::default()
-            .with_hash(user.password.clone())
-            .with_password(password)
-            .with_secret_key(
-                env::var("SECRET_ARGONAUTICA")
-                    .unwrap_or_else(|_| "pls provide the secret for ARGONAUTICA".to_string()),
-            )
-            .verify()
+        let pass = verify_password(&password, &user.password)
             .map_err(|_| diesel::result::Error::RollbackTransaction)?;
         if pass {
             return Ok(to_public_user(user));
@@ -158,13 +179,7 @@ impl Store {
 
         if let Some(password) = password {
             if !password.is_empty() {
-                let pass = Hasher::default()
-                    .with_password(password)
-                    .with_secret_key(
-                        env::var("SECRET_ARGONAUTICA")
-                            .unwrap_or_else(|_| "pls provide the secret for ARGONAUTICA".to_string()),
-                    )
-                    .hash()
+                let pass = hash_password(&password)
                     .map_err(|_| diesel::result::Error::RollbackTransaction)?;
 
                 diesel::update(crate::schema::User::table.filter(crate::schema::User::id.eq(&user_id)))
