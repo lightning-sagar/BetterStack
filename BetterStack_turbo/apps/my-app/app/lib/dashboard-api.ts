@@ -1,4 +1,4 @@
-import type { Website, WebsiteTick } from "../types/dashboard";
+import type { Alert, AlertsSummary, Website, WebsiteTick } from "../types/dashboard";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
@@ -92,5 +92,30 @@ export async function createWebsite(token: string, url: string): Promise<{ messa
   return {
     message: data.message || "Website created",
     website_id: data.website_id || "",
+  };
+}
+
+export async function fetchAlerts(token: string): Promise<Alert[]> {
+  const response = await authorizedFetch("/alerts", token);
+  const data = (await response.json()) as { alerts?: Alert[]; message?: string };
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch alerts");
+  }
+
+  return data.alerts ?? [];
+}
+
+export async function fetchAlertsSummary(token: string): Promise<AlertsSummary> {
+  const response = await authorizedFetch("/alerts/summary", token);
+  const data = (await response.json()) as Partial<AlertsSummary> & { message?: string };
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch alerts summary");
+  }
+
+  return {
+    active_alerts: data.active_alerts ?? 0,
+    status: data.status ?? "unknown",
   };
 }

@@ -8,6 +8,20 @@ use store::{Store, schema::Region};
 use tokio::time::{timeout, Duration};
 use uuid::Uuid;
 
+fn region_consumer_group(region_input: &str) -> String {
+    let slug = region_input
+        .trim()
+        .to_lowercase()
+        .chars()
+        .map(|ch| if ch.is_ascii_alphanumeric() { ch } else { '-' })
+        .collect::<String>()
+        .trim_matches('-')
+        .to_string();
+
+    let slug = if slug.is_empty() { "unknown".to_string() } else { slug };
+    format!("worker-group:{slug}")
+}
+
 async fn resolve_region_id(store: &mut Store, region_input: &str) -> Result<String, diesel::result::Error> {
     if let Ok(region_id) = Region::table
         .filter(Region::id.eq(region_input))
@@ -67,12 +81,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .or_else(|_| std::env::var("REGION_NAME"))
         .unwrap_or_else(|_| "india".to_string());
     let worker_id = std::env::var("WORKER_ID").unwrap_or_else(|_| "1".to_string());
-    let consumer_group = std::env::var("CONSUMER_GROUP").unwrap_or_else(|_| "worker-group".to_string());
+    let consumer_group = std::env::var("CONSUMER_GROUP").unwrap_or_else(|_| region_consumer_group(&region_input));
 
     let http_client = Client::new();
     let mut store = Store::default()?;
     let region_id = resolve_region_id(&mut store, &region_input).await?;
     let mut redis = redis_stream::connectRedis().await?;
+
+    println!(
+        "Worker '{}' running in region '{}' ({}) using Redis consumer group '{}'",
+        worker_id, region_input, region_id, consumer_group
+    );
 
     loop {
         let res = XReadGroup(&mut redis, &worker_id, &consumer_group).await?;

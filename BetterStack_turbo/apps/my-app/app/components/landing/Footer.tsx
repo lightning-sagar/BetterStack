@@ -4,7 +4,7 @@ export function Footer({ className = "" }: { className?: string }) {
       <div>
         <p className="font-display text-2xl font-extrabold text-primary">WebMonitor</p>
         <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
-          © 2024 Obsidian Pulse WebMonitor. All rights reserved.
+          BetterStack Observability. All rights reserved.
         </p>
       </div>
       <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold uppercase tracking-[0.14em] text-on-surface-variant">

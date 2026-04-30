@@ -17,3 +17,20 @@ export type WebsiteTick = {
     name: string;
   };
 };
+
+export type Alert = {
+  id: string;
+  website_id: string;
+  website_url: string;
+  status: "Up" | "Down" | "Unknown" | string;
+  response_time_ms: number;
+  region: string;
+  time_checked: string;
+  title: string;
+  message: string;
+};
+
+export type AlertsSummary = {
+  active_alerts: number;
+  status: string;
+};

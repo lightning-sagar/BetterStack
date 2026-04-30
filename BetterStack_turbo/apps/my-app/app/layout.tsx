@@ -13,7 +13,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Obsidian Pulse",
+  title: "BetterStack Observability",
   description: "A high-end observability landing page built for speed, silence, and clarity.",
 };
 
