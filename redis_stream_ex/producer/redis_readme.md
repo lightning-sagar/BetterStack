@@ -1,5 +1,8 @@
 docker run -d -p 2739:2739 redis
+docker run -d -p 2739:2739 -v betterstack_rust: redis
 
+
+docker run -d -p 6379:6379 -v betterstack_rust:/data redis
 docker ps
 
 docker exec -it bc82ad0b0bec sh

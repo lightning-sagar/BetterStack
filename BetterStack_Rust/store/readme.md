@@ -1,5 +1,7 @@
 - use 
     docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+
+    docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d -v betterstack_rust_postgres:/var/lib/postgresql/data postgres
 - save the env file with the creds
 - run `diesel setup` for migration
 - now we need to generate migration -> `diesel migration generate (add the name optinal)` => this will create "empty" sql file for u...

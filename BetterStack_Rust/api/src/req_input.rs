@@ -7,14 +7,46 @@ pub struct CreateWebsiteInput {
 
 #[derive(Deserialize, Serialize)]
 pub struct SignInInput {
-    pub username: String,
+    pub email: String,
     pub password: String,
-    pub email: Option<String>,
 }
 
 #[derive(Deserialize, Serialize)]
 pub struct SignUpInput {
-    pub username: String,
-    pub password: String,
+    #[serde(rename = "firstName")]
+    pub first_name: String,
+    #[serde(rename = "lastName")]
+    pub last_name: String,
     pub email: String,
+    pub password: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct UpdateUsernameInput {
+    pub username: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct UpdateProfileInput {
+    pub username: Option<String>,
+    pub email: Option<String>,
+    pub password: Option<String>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct SearchWebsitesQuery {
+    pub q: Option<String>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct IncidentsQuery {
+    pub from: Option<String>,
+    pub to: Option<String>,
+    pub limit: Option<i64>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct DateRangeQuery {
+    pub from: Option<String>,
+    pub to: Option<String>,
 }

@@ -245,7 +245,7 @@ export function WebsiteDetailPortal() {
 
     const avgResponse = total
       ? Math.round(ticks.reduce((sum, tick) => sum + tick.response_time_ms, 0) / total)
-      : 142;
+      : 0;
 
     const uniqueRegions = new Set(ticks.map((tick) => tick.region_id).filter(Boolean)).size;
 
@@ -267,7 +267,7 @@ export function WebsiteDetailPortal() {
     return {
       uptime,
       avgResponse,
-      nodeCount: uniqueRegions || 18,
+      nodeCount: uniqueRegions || 1,
       trend,
       bars,
       isOperational: ticks[0]?.status_code !== "Down",

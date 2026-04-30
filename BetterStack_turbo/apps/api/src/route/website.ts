@@ -128,7 +128,7 @@ export function websiteRouter(): RouterType {
     }
   });
 
-  router.delete("/website/:websiteId", authMiddleware, async (req, res) => {
+  router.delete("/website/:websiteId/delete", authMiddleware, async (req, res) => {
     try {
       const userId = req.user?.userId;
       const { websiteId } = req.params;

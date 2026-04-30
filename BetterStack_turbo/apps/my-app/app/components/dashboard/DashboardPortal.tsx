@@ -262,7 +262,6 @@ export function DashboardPortal() {
             ticks: await fetchWebsiteTicks(token, website.id),
           })),
         );
-
         setWebsites(withTicks);
       } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to load dashboard";
@@ -307,7 +306,7 @@ export function DashboardPortal() {
     if (!token) {
       return;
     }
-
+    console.log("Adding website with URL:", url);
     try {
       setIsSubmitting(true);
       await createWebsite(token, url);
@@ -400,7 +399,7 @@ export function DashboardPortal() {
                   <div className="mt-8 space-y-3">
                     <div className="rounded-lg bg-surface-dim p-3">
                       <p className="text-sm font-semibold text-on-surface">
-                        {summary.incidents ? "API Gateway Lag - Sydney" : "No active incidents"}
+                        {summary.incidents ? "API Gateway Lag - India" : "No active incidents"}
                       </p>
                     </div>
                   </div>
