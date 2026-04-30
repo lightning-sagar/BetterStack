@@ -75,7 +75,7 @@ fn persist_website_tick(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    dotenvy::dotenv().ok();
+    dotenvy::dotenv_override().ok();
 
     let region_input = std::env::var("REGION_ID")
         .or_else(|_| std::env::var("REGION_NAME"))

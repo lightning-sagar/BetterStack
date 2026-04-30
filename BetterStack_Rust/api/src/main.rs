@@ -15,7 +15,7 @@ pub mod route;
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), std::io::Error> {
-    dotenvy::dotenv().ok();
+    dotenvy::dotenv_override().ok();
 
     let store = Store::default().map_err(|error| {
         std::io::Error::other(format!(

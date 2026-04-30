@@ -22,7 +22,7 @@ async fn run_once(store: &mut Store, redis: &mut redis_stream::Redis) -> Result<
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    dotenvy::dotenv().ok();
+    dotenvy::dotenv_override().ok();
 
     let mut store = Store::default()?;
     let mut redis = connectRedis().await?;

@@ -203,7 +203,7 @@ pub async fn BulkXAck(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenvy::dotenv().ok();
+    dotenvy::dotenv_override().ok();
 
     let mut redis = connectRedis().await?;
     let websites = vec![WebsiteAdd {
