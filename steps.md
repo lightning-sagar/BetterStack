@@ -16,3 +16,24 @@ REGION_NAME=india WORKER_ID=india-1 cargo run -p worker
 ```bash
 cargo run pusher
 ```
+
+---
+
+to run the stepup
+- FE
+```bash
+cd apps/my-app/ 
+npm run dev
+```
+
+- api
+```bash
+cd api
+cargo run
+```
+
+- pusher
+```bash
+cd pusher
+cargo run
+```

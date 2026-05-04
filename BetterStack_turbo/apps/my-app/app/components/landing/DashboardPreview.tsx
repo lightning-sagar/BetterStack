@@ -6,6 +6,8 @@ const regions = [
   { name: "US-East", status: "Operational", latency: "603ms" },
   { name: "Frankfurt", status: "Stable", latency: "641ms" },
   { name: "Singapore", status: "Optimal", latency: "588ms" },
+  { name: "Ohio", status: "Optimal", latency: "498ms" },
+  { name: "Virginia", status: "Stable", latency: "550ms" },
 ];
 
 export function DashboardPreview() {

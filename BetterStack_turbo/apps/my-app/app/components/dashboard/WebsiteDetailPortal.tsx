@@ -50,9 +50,10 @@ const REGION_COORDS: Record<string, [number, number]> = {
   europe: [10.45, 51.17],
   uk: [-3.44, 55.38],
   germany: [10.45, 51.17],
-  singapore: [103.82, 1.35],
-  japan: [138.25, 36.2],
-  australia: [133.78, -25.27],
+  singapore: [103.85, 1.35],
+  frankfurt: [8.68, 50.11],
+  ohio: [-82.76, 40.39],
+  virginia: [-78.17, 37.77],
 };
 
 const world = worldTopology as unknown as Topology;
@@ -130,13 +131,14 @@ function clamp(value: number, min: number, max: number): number {
 
 function formatDateLabel(isoDate: string): string {
   const date = new Date(isoDate);
-  return date.toLocaleString("en-US", {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
     month: "short",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  });
+  }).format(date);
 }
 
 function formatLastUpdated(isoDate: string | null): string {
@@ -145,23 +147,25 @@ function formatLastUpdated(isoDate: string | null): string {
   }
 
   const date = new Date(isoDate);
-  return date.toLocaleString("en-US", {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
     month: "short",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-  });
+  }).format(date);
 }
 
 function formatShortTime(isoDate: string): string {
   const date = new Date(isoDate);
-  return date.toLocaleTimeString("en-US", {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  });
+  }).format(date);
 }
 
 function toRegionalLinePath(points: { x: number; y: number }[]): string {
