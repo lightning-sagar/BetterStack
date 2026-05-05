@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let mut store = Store::default()?;
     let mut redis = connectRedis().await?;
-    let mut ticker = interval(Duration::from_secs(1));
+    let mut ticker = interval(Duration::from_secs(30));
 
     loop {
         ticker.tick().await;

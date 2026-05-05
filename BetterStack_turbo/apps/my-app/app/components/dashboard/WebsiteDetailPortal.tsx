@@ -40,6 +40,8 @@ const MAP_WIDTH = 920;
 const MAP_HEIGHT = 430;
 const REGION_COLORS = ["#81ECFF", "#5CFD80", "#FFB86B", "#C792EA", "#FF716C", "#6EA8FE", "#F8E16C", "#2DD4BF"];
 const LINE_PATTERNS = ["", "10 7", "3 6", "14 5 4 5", "2 4", "18 8", "8 4 2 4", "12 3"];
+const IST_TIME_ZONE = "Asia/Kolkata";
+const TIMEZONE_OFFSET_PATTERN = /(?:z|[+-]\d{2}:?\d{2})$/i;
 
 const REGION_COORDS: Record<string, [number, number]> = {
   india: [78.96, 22.59],
@@ -129,16 +131,25 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
+function parseApiDate(isoDate: string): Date {
+  const normalizedDate = isoDate.includes("T") ? isoDate : isoDate.replace(" ", "T");
+  const utcDate = TIMEZONE_OFFSET_PATTERN.test(normalizedDate) ? normalizedDate : `${normalizedDate}Z`;
+
+  return new Date(utcDate);
+}
+
 function formatDateLabel(isoDate: string): string {
-  const date = new Date(isoDate);
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Kolkata",
+  const date = parseApiDate(isoDate);
+  const label = new Intl.DateTimeFormat("en-US", {
+    timeZone: IST_TIME_ZONE,
     month: "short",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   }).format(date);
+
+  return `${label} IST`;
 }
 
 function formatLastUpdated(isoDate: string | null): string {
@@ -146,9 +157,9 @@ function formatLastUpdated(isoDate: string | null): string {
     return "Not synced yet";
   }
 
-  const date = new Date(isoDate);
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Kolkata",
+  const date = parseApiDate(isoDate);
+  const label = new Intl.DateTimeFormat("en-US", {
+    timeZone: IST_TIME_ZONE,
     month: "short",
     day: "2-digit",
     hour: "2-digit",
@@ -156,16 +167,20 @@ function formatLastUpdated(isoDate: string | null): string {
     second: "2-digit",
     hour12: false,
   }).format(date);
+
+  return `${label} IST`;
 }
 
 function formatShortTime(isoDate: string): string {
-  const date = new Date(isoDate);
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Kolkata",
+  const date = parseApiDate(isoDate);
+  const label = new Intl.DateTimeFormat("en-US", {
+    timeZone: IST_TIME_ZONE,
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   }).format(date);
+
+  return `${label} IST`;
 }
 
 function toRegionalLinePath(points: { x: number; y: number }[]): string {
@@ -678,7 +693,7 @@ export function WebsiteDetailPortal() {
     const toTime = toDate ? new Date(`${toDate}T23:59:59.999`).getTime() : Number.POSITIVE_INFINITY;
 
     return ticks.filter((tick) => {
-      const checkedAt = new Date(tick.time_checked).getTime();
+      const checkedAt = parseApiDate(tick.time_checked).getTime();
       return checkedAt >= fromTime && checkedAt <= toTime;
     });
   }, [fromDate, toDate, ticks]);
