@@ -123,6 +123,52 @@ The monitoring pipeline can be summarized as:
 6. Workers store tick data in PostgreSQL.
 7. Dashboard fetches website and tick history for visualization.
  
+## Development and Deployment
+
+BetterStack is split into a Rust backend workspace and a TurboRepo frontend/service workspace. In the current deployment state, the frontend and HTTP APIs are not deployed publicly. The deployed production components are the monitoring workers, which run on Render free instances.
+
+The active Render worker deployments are distributed across these regions:
+
+- Ohio
+- Virginia
+- Singapore
+- Frankfurt
+
+For local development, first clone the repository and create the required `.env` files with database, Redis, JWT, and frontend API configuration values. The exact values depend on the local or hosted PostgreSQL and Redis instances being used.
+
+Run the Rust backend services from `BetterStack_Rust/`:
+
+```sh
+cd BetterStack_Rust
+cargo run -p api
+cargo run -p pusher
+REGION_NAME=ohio WORKER_ID=ohio-1 cargo run -p worker
+```
+
+The Rust API listens on port `3001`. The Rust pusher reads websites from PostgreSQL and publishes jobs to Redis Streams. The Rust worker consumes those jobs, checks each website, and stores tick results in PostgreSQL. Workers can be started with different `REGION_NAME` and `WORKER_ID` values to represent separate monitoring locations.
+
+Run the TurboRepo frontend from `BetterStack_turbo/`:
+
+```sh
+cd BetterStack_turbo
+npm install
+npm run dev --workspace=my-app
+```
+
+The Next.js frontend runs on the default Next.js development port, usually `http://localhost:3000`. It calls the API configured through `NEXT_PUBLIC_API_URL`, defaulting to `http://localhost:5000` in the frontend source. If using the Rust API locally, point the frontend environment variable at the Rust API port.
+
+The TurboRepo also contains TypeScript API, pusher, and worker implementations for development and comparison:
+
+```sh
+npm run dev --workspace=api
+cd apps/pusher && bun index.ts
+cd apps/worker && bun index.ts
+```
+
+Database schema management differs by implementation. The Rust workspace uses Diesel migrations under `BetterStack_Rust/store/migrations`. The TurboRepo uses Prisma migrations under `BetterStack_turbo/packages/store/prisma/migrations`. PostgreSQL and Redis must already be available locally or through hosted services; `npm run dev` does not start those services automatically.
+
+This deployment model keeps the production monitoring workload focused on the Render-hosted workers while the frontend and API layers remain local/not publicly deployed at this stage. Earlier VPS-specific production assumptions such as Nginx reverse proxying, Certbot SSL automation, Redis persistence tuning, and object-storage backups are not part of the current deployment.
+
 
 
 ## Literature Review

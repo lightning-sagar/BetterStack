@@ -66,6 +66,8 @@ npm run dev --workspace=my-app
 
 The frontend runs on the default Next.js port, usually `http://localhost:3000`.
 
+Set `NEXT_PUBLIC_API_URL` if the frontend should call an API other than the default `http://localhost:5000`. For example, when using the Rust API locally, point it at `http://localhost:3001`.
+
 ### API
 
 ```sh
@@ -203,3 +205,9 @@ docker compose down
 - The `pusher` and `worker` packages are started manually because they do not currently define workspace scripts.
 - Make sure the API, Redis, and database are available before starting the worker.
 - When using Docker, ensure the `DATABASE_URL` and `REDIS_URL` environment variables in your `.env` file point to the Docker containers.
+
+## Deployment Status
+
+The TurboRepo frontend and TypeScript API are not currently deployed publicly. They are used for local development and UI/API iteration.
+
+Production monitoring is currently handled by Render-hosted worker instances. The active worker regions are Ohio, Virginia, Singapore, and Frankfurt. These workers consume Redis Stream jobs and persist website tick results to PostgreSQL. The frontend and API layers should not be described as deployed production services unless a separate deployment is added later.
